@@ -18,7 +18,12 @@ var app = express();
 // cors
 // app.use(credentials);
 // app.use(cors(corsOptions));
-app.use(cors());
+app.use(
+  cors({
+    origin: ["http://localhost:3000"],
+    credentials: true,
+  })
+);
 
 // Basic Express configuration
 app.use(bodyParser.json());
@@ -41,24 +46,24 @@ app.get("/account", basic.account);
 app.get("/logout", basic.logout);
 
 // GET /auth/microsoft
-// app.get("/auth/microsoft", auth.authentication);
-var passport = require("passport");
-const authentication = passport.authenticate("microsoft", {
-  // Optionally add any authentication params here
-  // prompt: 'select_account'
-});
-app.get(
-  "/auth/microsoft",
-  (req, res, next) => {
-    console.log("Starting Microsoft authentication");
-    authentication(req, res, next);
-    console.log("Microsoft authentication completed");
-    // console.log(req);
-  },
-  (req, res) => {
-    // Handle any post-authentication logic here
-  }
-);
+app.get("/auth/microsoft", auth.authentication);
+// var passport = require("passport");
+// const authentication = passport.authenticate("microsoft", {
+//   // Optionally add any authentication params here
+//   // prompt: 'select_account'
+// });
+// app.get(
+//   "/auth/microsoft",
+//   (req, res, next) => {
+//     console.log("Starting Microsoft authentication");
+//     authentication(req, res, next);
+//     console.log("Microsoft authentication completed");
+//     // console.log(req);
+//   },
+//   (req, res) => {
+//     // Handle any post-authentication logic here
+//   }
+// );
 
 // GET /auth/microsoft/callback
 app.get("/auth/microsoft/callback", auth.microsoftCallback);
